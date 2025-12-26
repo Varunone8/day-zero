@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { habits } from "../data/mockData";
 import HabitGrid from "./HabitGrid";
 import StatsCards from "./StatsCards";
 import SidePanel from "./SidePanel";
 import ProgressCharts from "./ProgressCharts";
 
+import OceanBackground from "../components/OceanBackground";
+import FocusSection from "../components/FocusSection";
+import useInView from "../hooks/useInView";
+
 export default function Dashboard() {
-  const [theme, setTheme] = useState("dark");
-  const [range, setRange] = useState("week");
+  /* ---------- LOAD FROM localStorage ---------- */
+  const savedTheme = localStorage.getItem("theme");
+  const savedRange = localStorage.getItem("range");
+  const savedGrid = JSON.parse(localStorage.getItem("grid"));
+
+  const [theme, setTheme] = useState(savedTheme || "dark");
+  const [range, setRange] = useState(savedRange || "week");
 
   const days =
     range === "week"
@@ -15,8 +24,22 @@ export default function Dashboard() {
       : Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`);
 
   const [grid, setGrid] = useState(
-    habits.map(() => days.map(() => false))
+    savedGrid ||
+      habits.map(() =>
+        Array.from(
+          { length: range === "week" ? 7 : 30 },
+          () => false
+        )
+      )
   );
+
+  const [selectedHabit, setSelectedHabit] = useState(null);
+  const [habitData, setHabitData] = useState([]);
+
+  /* ---------- SAVE TO localStorage ---------- */
+  useEffect(() => localStorage.setItem("theme", theme), [theme]);
+  useEffect(() => localStorage.setItem("range", range), [range]);
+  useEffect(() => localStorage.setItem("grid", JSON.stringify(grid)), [grid]);
 
   const handleRangeChange = (newRange) => {
     setRange(newRange);
@@ -30,25 +53,21 @@ export default function Dashboard() {
     );
   };
 
-  const [selectedHabit, setSelectedHabit] = useState(null);
-  const [habitData, setHabitData] = useState([]);
+  /* ---------- ONLY STATS GET FOCUS ---------- */
+  const [statsRef, statsInView] = useInView(0.6);
 
   return (
     <div className={theme === "dark" ? "dark" : ""}>
-      <div
-        className="
-          min-h-screen p-10 transition-colors duration-500
-          bg-gradient-to-b from-cyan-100 via-sky-100 to-blue-50
-          dark:bg-gradient-to-b dark:from-slate-950 dark:via-sky-950 dark:to-slate-900
-        "
-      >
-        {/* HEADER */}
+      {/* 🌊 BACKGROUND */}
+      <OceanBackground theme={theme} />
+
+      <div className="min-h-screen p-10">
+        {/* ---------- HEADER ---------- */}
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-4xl font-bold text-sky-900 dark:text-sky-100">
             DAY ZERO
           </h1>
 
-          {/* CONTROLS */}
           <div className="flex items-center gap-4">
             {/* WEEK / MONTH */}
             <div className="flex bg-white/70 dark:bg-white/10 rounded-xl p-1 backdrop-blur border border-white/30">
@@ -79,51 +98,66 @@ export default function Dashboard() {
               </button>
             </div>
 
-            {/* THEME TOGGLE (Naruto / Sauske) */}
+            {/* THEME TOGGLE */}
             <button
               onClick={() =>
                 setTheme(theme === "dark" ? "light" : "dark")
               }
               className="
-                h-10 w-10 flex items-center justify-center rounded-full
+                h-12 w-12 flex items-center justify-center rounded-full
                 bg-white/70 dark:bg-white/10
                 hover:scale-110 transition
                 backdrop-blur border border-white/30
               "
             >
-              <img
-                src={
-                  theme === "dark"
-                    ? "/avatars/naruto.jpg"
-                    : "/avatars/sauske.png"
-                }
-                alt="theme icon"
-                className="w-6 h-6 object-cover rounded-full"
-              />
+              <div className="w-9 h-9 rounded-full overflow-hidden">
+                <img
+                  src={
+                    theme === "dark"
+                      ? "/avatars/naruto.jpg"
+                      : "/avatars/sauske.png"
+                  }
+                  alt="theme avatar"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </button>
           </div>
         </div>
 
-        {/* STATS */}
-        <StatsCards grid={grid} />
-
-        {/* MAIN */}
-        <div className="grid grid-cols-[3fr_1fr] gap-6">
-          <HabitGrid
-            days={days}
-            grid={grid}
-            setGrid={setGrid}
-            onSelectHabit={(habit, data) => {
-              setSelectedHabit(habit);
-              setHabitData(data);
-            }}
-          />
-
-          <SidePanel habit={selectedHabit} data={habitData} grid={grid} />
+        {/* ---------- STATS (FOCUS ONLY HERE) ---------- */}
+        <div ref={statsRef}>
+          <FocusSection active={statsInView}>
+            <StatsCards grid={grid} />
+          </FocusSection>
         </div>
 
-        {/* GRAPH */}
-        <ProgressCharts grid={grid} />
+        {/* ---------- MAIN CONTENT (NO BLUR) ---------- */}
+        <div className="grid grid-cols-[3fr_1fr] gap-6 mt-10">
+          {/* LEFT */}
+          <div>
+            <HabitGrid
+              days={days}
+              grid={grid}
+              setGrid={setGrid}
+              onSelectHabit={(habit, data) => {
+                setSelectedHabit(habit);
+                setHabitData(data);
+              }}
+            />
+
+            <ProgressCharts grid={grid} />
+          </div>
+
+          {/* RIGHT */}
+          <div>
+            <SidePanel
+              habit={selectedHabit}
+              data={habitData}
+              grid={grid}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
