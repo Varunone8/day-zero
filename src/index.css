@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-body;
+}
+
+/* 🌊 Ocean Wave Animation */
+body {
+  font-family: 'Inter', sans-serif;
+}
+.wave-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(14,165,233,0.15),
+    rgba(2,6,23,0.9)
+  );
+  animation: waveMove 20s linear infinite;
+}
+
+@keyframes waveMove {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-25%) translateY(-10%);
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+}
+
