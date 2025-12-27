@@ -13,14 +13,14 @@ export default function SidePanel({ habit, data, grid }) {
         {habit || "Overall Progress"}
       </h3>
 
-      <div className="w-full h-3 bg-cyan-200 dark:bg-slate-700 rounded">
+      <div className="w-full h-3 bg-cyan-200 dark:bg-slate-700/60 rounded">
         <div
-          className="h-3 bg-cyan-500 rounded"
+          className="h-3 bg-cyan-500 dark:bg-teal-400 rounded"
           style={{ width: `${overall}%` }}
         />
       </div>
 
-      <p className="mt-3 text-sky-700 dark:text-sky-300 font-medium">
+      <p className="mt-3 text-sky-700 dark:text-teal-300 font-medium">
         {overall}%
       </p>
     </div>

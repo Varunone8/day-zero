@@ -21,14 +21,14 @@ export default function HabitGrid({ days, grid, setGrid, onSelectHabit }) {
           gridTemplateColumns: `220px repeat(${days.length}, 52px)`
         }}
       >
-        <div className="font-semibold text-sky-900 dark:text-sky-200">
+        <div className="font-semibold text-sky-900 dark:text-teal-200">
           Habits
         </div>
 
         {days.map((day, i) => (
           <div
             key={i}
-            className="text-center text-xs font-semibold text-sky-600 dark:text-sky-300"
+            className="text-center text-xs font-semibold text-sky-600 dark:text-teal-300"
           >
             {day}
           </div>
@@ -36,7 +36,7 @@ export default function HabitGrid({ days, grid, setGrid, onSelectHabit }) {
 
         {habits.map((habit, h) => (
           <React.Fragment key={habit}>
-            <div className="text-sky-900 dark:text-slate-100 text-sm">
+            <div className="text-sky-900 dark:text-teal-100 text-sm">
               {habit}
             </div>
 
@@ -51,8 +51,8 @@ export default function HabitGrid({ days, grid, setGrid, onSelectHabit }) {
                   hover:scale-110 active:scale-95
                   ${
                     grid[h][d]
-                      ? "bg-cyan-500 text-white shadow-lg"
-                      : "bg-cyan-100 dark:bg-slate-800/60 hover:bg-cyan-200 dark:hover:bg-cyan-800/40"
+                      ? "bg-cyan-500 dark:bg-teal-400 text-white dark:text-slate-900 shadow-lg"
+                      : "bg-cyan-100 dark:bg-slate-800/60 hover:bg-cyan-200 dark:hover:bg-slate-700/60"
                   }
                 `}
               >

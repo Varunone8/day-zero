@@ -61,10 +61,10 @@ function Card({ title, value, suffix }) {
         hover:scale-[1.03]
       "
     >
-      <p className="text-sm text-sky-600 dark:text-sky-300 mb-1">
+      <p className="text-sm text-sky-600 dark:text-teal-300 mb-1">
         {title}
       </p>
-      <h2 className="text-4xl font-bold text-sky-900 dark:text-sky-100">
+      <h2 className="text-4xl font-bold text-sky-900 dark:text-teal-100">
         {value}{suffix}
       </h2>
     </div>

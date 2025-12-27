@@ -64,7 +64,7 @@ export default function Dashboard() {
       <div className="min-h-screen p-10">
         {/* ---------- HEADER ---------- */}
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-4xl font-bold text-sky-900 dark:text-sky-100">
+          <h1 className="text-4xl font-bold text-sky-900 dark:text-teal-200">
             DAY ZERO
           </h1>
 
@@ -76,8 +76,8 @@ export default function Dashboard() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition
                   ${
                     range === "week"
-                      ? "bg-cyan-500 text-white"
-                      : "text-sky-700 dark:text-sky-200 hover:bg-white/40"
+                      ? "bg-cyan-500 dark:bg-teal-400 text-white dark:text-slate-900"
+                      : "text-sky-700 dark:text-teal-200 hover:bg-white/40"
                   }
                 `}
               >
@@ -89,8 +89,8 @@ export default function Dashboard() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition
                   ${
                     range === "month"
-                      ? "bg-cyan-500 text-white"
-                      : "text-sky-700 dark:text-sky-200 hover:bg-white/40"
+                      ? "bg-cyan-500 dark:bg-teal-400 text-white dark:text-slate-900"
+                      : "text-sky-700 dark:text-teal-200 hover:bg-white/40"
                   }
                 `}
               >
@@ -115,7 +115,7 @@ export default function Dashboard() {
                   src={
                     theme === "dark"
                       ? "/avatars/naruto.jpg"
-                      : "/avatars/sauske.png"
+                      : "/avatars/sasuke.png"
                   }
                   alt="theme avatar"
                   className="w-full h-full object-cover"
